@@ -1,0 +1,37 @@
+{
+  "name": "admin-cube",
+  "short_name": "admin cube",
+  "description": "student cube administrator software",
+  "start_url": "/",
+  "display": "standalone",
+  "id": "/",
+  "related_applications": ["apps", "web", "learn"],
+  "theme_color": "#fff",
+  "background_color": "#86dfd9",
+  "icons": [
+    {
+      "src": "assets/splash/manifest-icon-192.maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/splash/manifest-icon-192.maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "assets/splash/manifest-icon-512.maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/splash/manifest-icon-512.maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
