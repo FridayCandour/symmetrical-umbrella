@@ -125,7 +125,7 @@ const Home = async () => {
   });
 
   const domain = await _.fetcher(
-    "http://localhost:3002/admin/stat",
+    "https://unihub.trgwii.com/admin/stat",
     "POST",
     {
       "Content-Type": "application/json",
