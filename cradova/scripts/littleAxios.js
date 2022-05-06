@@ -27,8 +27,7 @@ export default async function littleAxios(url, data, header, callback) {
   for (const [k, v] of Object.entries(data)) {
     formData.append(k, v);
   }
-  ajax.addEventListener("error", (err) => {
-    console.log(err);
+  ajax.addEventListener("error", () => {
     callback({
       response: {
         message: `${method} ${url} net::ERR_FAILED`,
@@ -36,5 +35,5 @@ export default async function littleAxios(url, data, header, callback) {
     });
   });
   await ajax.open(method, url, true);
-  ajax.send(formData);
+  await ajax.send(formData);
 }

@@ -54,16 +54,16 @@ const join = (credentials, err) => {
     _("button.btn", {
       text: "Access Server",
       onclick: async () => {
-        // _.dispatch("login", { tree: Loader() });
+        _.dispatch("login", { tree: Loader() });
         await _.littleAxios(
           "https://unihub.trgwii.com/admin/register",
           credentials.get(),
           (res) => {
             const Course = JSON.parse(res.response);
             if (Course.message !== "ok") {
-              // _.dispatch("login", {
-              //   tree: join(credentials, Course.message),
-              // });
+              _.dispatch("login", {
+                tree: join(credentials, Course.message),
+              });
             } else {
               _.LS.store("x-000-ttf-kktw-iii-cude", Course.data);
               _.Router.navigate("/");

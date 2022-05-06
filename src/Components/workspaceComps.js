@@ -314,7 +314,7 @@ export function CourseModal() {
             "https://unihub.trgwii.com/admin/create/Course",
             credentials.get(),
             (res) => {
-              const Course = res.response;
+              const Course = JSON.parse(res.response);
               if (Course.message !== "ok") {
                 _.dispatch("workspace", {
                   tree: ErrorBox(Course, "Courses"),
@@ -361,7 +361,7 @@ export function CourseModal() {
             "https://unihub.trgwii.com/admin/update/Course",
             credentials.get(),
             (res) => {
-              const Course = res.response;
+              const Course = JSON.parse(res.response);
               if (Course.message !== "ok") {
                 _.dispatch("workspace", {
                   tree: ErrorBox(Course, "Courses"),
@@ -489,7 +489,7 @@ export function ResourseModal() {
             "https://unihub.trgwii.com/admin/create/resource",
             credentials.get(),
             (res) => {
-              const Resource = res.response;
+              const Resource = JSON.parse(res.response);
               if (Resource.message !== "ok") {
                 _.dispatch("workspace", {
                   tree: ErrorBox(Resource, "Resources"),
@@ -542,7 +542,7 @@ export function ResourseModal() {
             "https://unihub.trgwii.com/admin/up/resource",
             credentials.get(),
             (res) => {
-              const Resource = res.response;
+              const Resource = JSON.parse(res.response);
               if (Resource.message !== "ok") {
                 _.dispatch("workspace", {
                   tree: ErrorBox(Resource, "Resources"),
@@ -678,7 +678,7 @@ export function NotificationModal() {
             "https://unihub.trgwii.com/admin/create/notification",
             credentials.get(),
             (res) => {
-              const Notification = res.response;
+              const Notification = JSON.parse(res.response);
               if (Notification !== "ok") {
                 _.dispatch("workspace", {
                   tree: ErrorBox(Notification.message, "Notifications"),
