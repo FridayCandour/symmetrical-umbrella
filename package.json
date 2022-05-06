@@ -1,12 +1,14 @@
 {
   "name": "admin-cube",
   "version": "1.0.0",
-  "description": "admin-cube app",
+  "description": "admin-cube",
   "main": "index.js",
   "type": "module",
   "keywords": [],
   "scripts": {
-    "dev": "vite"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "author": "Friday Candour",
   "license": "MIT",
