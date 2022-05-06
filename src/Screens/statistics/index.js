@@ -34,9 +34,9 @@ const stats = {
   // notification: undefined,
   activeDiscovery: "1000000000000000000",
   // activeAdverts: undefined,
-  allVideoStream: "0000000000000000000",
+  allVideoStream: "10000000000000000000",
   // allVideoStream: undefined,
-  allGroups: "0000000000000000000",
+  allGroups: "10000000000000000000",
   // allGroups: undefined,
 };
 function make(stats) {
@@ -82,22 +82,61 @@ const homeStatis = function (statisticsData) {
           "div.data",
           {
             style: {
+              display: "flex",
               marginBottom: 10,
               margin: "auto",
               width: "90%",
               padding: "4px",
               borderRadius: "10px",
               backgroundColor: "whitesmoke",
-              alignItems: "center",
-              justifyContent: "space-between",
+              alignItems: !Array.isArray(data.value)
+                ? "space-between"
+                : "flex-start",
+              justifyContent: !Array.isArray(data.value)
+                ? "space-between"
+                : "flex-start",
               borderRadius: "8px",
-              minHeight: "20%",
-              flexDirection: "row",
+              flexDirection: !Array.isArray(data.value) ? "row" : "column",
               color: "#111110",
+              // border: "2px red solid",
             },
           },
-          _("span", { text: data.name }),
-          _("span", { text: data.value })
+          _("h3", {
+            text: data.name.includes("_")
+              ? data.name.split("_").join("  ")
+              : data.name,
+            style: {
+              borderBottom: "2px #4dccc6 solid",
+              margin: !Array.isArray(data.value) ? "5px" : "auto",
+              color: "#06222d",
+              fontWeight: "200",
+            },
+          }),
+          !Array.isArray(data.value)
+            ? _("span", { text: data.value })
+            : data.value.map((v) => {
+                return _(
+                  "h3",
+                  {
+                    text: v.title ? v.title : v.resourceTitle,
+                    onclick: () => {
+                      const link = v.link ? v.link : v.image;
+                      if (link) {
+                        window.open(link);
+                      }
+                    },
+                    style: {
+                      fontWeight: "100",
+                      fontSize: "14px",
+                    },
+                  },
+                  v.Course
+                    ? _("span", {
+                        text: "   ________  " + v.Course.length + "   courses",
+                      })
+                    : ""
+                );
+              })
         )
       ),
 
@@ -125,7 +164,7 @@ const Home = async () => {
   });
 
   const domain = await _.fetcher(
-    "https://unihub.trgwii.com/admin/stat",
+    "http://localhost:3001/admin/stat",
     "POST",
     {
       "Content-Type": "application/json",

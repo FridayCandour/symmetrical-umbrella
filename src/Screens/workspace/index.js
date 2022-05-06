@@ -38,7 +38,7 @@ const TopNavigationBar = () => {
         style: {
           display: "flex",
           alignContent: "center",
-          padding: "0px 20px 0px 260px",
+          padding: "0px 0px 0px 290px",
           justifyContent: "center",
           marginBottom: "8px",
           overflow: "auto",

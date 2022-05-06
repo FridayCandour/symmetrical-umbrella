@@ -59,8 +59,9 @@ class Screen {
     this.detach();
     document.querySelector("#app-wrapper").append(this.template);
     if (document.querySelector("#app-wrapper").childElementCount > 1) {
-      this.detach();
+      //   this.detach();
     }
+    console.log(document.querySelector("#app-wrapper").childElementCount);
     this.callBacks.forEach((cb) => cb(this.template.firstChild));
   }
 }

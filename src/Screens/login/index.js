@@ -2,9 +2,6 @@ import _ from "../../../cradova/index.js";
 import { Loader } from "../../Components/workspaceComps.js";
 import { Input } from "../../Components/index.js";
 import xp from "../../../assets/images/xp-level.svg";
-const storeData = async (data) => {
-  console.log(data);
-};
 
 const join = (credentials, err) => {
   if (!err) {
@@ -56,13 +53,19 @@ const join = (credentials, err) => {
       onclick: async () => {
         _.dispatch("login", { tree: Loader() });
         await _.littleAxios(
-          "https://unihub.trgwii.com/admin/register",
+          "http://localhost:3001/admin/register",
           credentials.get(),
           (res) => {
-            const Course = JSON.parse(res.response);
+            let Course = res.response;
+            if (Course.includes(":")) {
+              Course = JSON.parse(Course);
+            }
             if (Course.message !== "ok") {
               _.dispatch("login", {
-                tree: join(credentials, Course.message),
+                tree: join(
+                  credentials,
+                  Course.message ? Course.message : Course
+                ),
               });
             } else {
               _.LS.store("x-000-ttf-kktw-iii-cude", Course.data);

@@ -46,14 +46,7 @@ Router.navigate = async function (href) {
     route = Router.routes[href];
     link = href;
   }
-
-  if (route) {
-    await route.controller();
-  } else {
-    throw new Error("cradova err route doesn't exist");
-  }
   window.history.pushState({}, "", link);
-  window.scrollTo(0, 0);
   return;
 };
 
@@ -71,9 +64,12 @@ Router.router = function (e) {
   }
   if (e.target.parentElement && e.target.parentElement.tagName === "A") {
     Alink = e.target.parentElement;
-    if (Alink && Alink.href.includes("#")) {
-      return;
-    }
+  }
+  if (Alink && Alink.href.includes("#")) {
+    return;
+  }
+  if (Alink && Alink.href.includes("javascript")) {
+    return;
   }
 
   e.preventDefault();
@@ -101,8 +97,8 @@ Router.router = function (e) {
   const route = Router.routes[url];
   if (route) {
     route.controller(e);
+    window.scrollTo(0, 0);
   }
-  window.scrollTo(0, 0);
 };
 
 /**

@@ -69,7 +69,7 @@ const profile = () => {
       _("button.btn| Save Current Logins", {
         onclick: async () => {
           await _.littleAxios(
-            "https://unihub.trgwii.com/admin/register",
+            "http://localhost:3001/admin/register",
             credentials.get(),
             (res) => {
               const Course = JSON.parse(res.response);

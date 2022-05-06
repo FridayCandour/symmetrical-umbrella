@@ -1,5 +1,6 @@
 import _ from "../../cradova/index.js";
 import { Input } from "./index.js";
+import loading from "../../assets/spinner.png";
 // #e2c9b3
 // #f3f8fc
 // #A0A3BD
@@ -41,8 +42,8 @@ export const Loader = () => {
         backgroundColor: "#efeeea",
       },
     },
-    _("img", {
-      src: "../../../assets/loading.gif",
+    _("img.spin", {
+      src: loading,
       style: {
         width: "22px",
       },
@@ -184,7 +185,7 @@ export function DomainModal() {
         onclick: async () => {
           _.dispatch("workspace", { tree: Loader() });
           const domain = await _.fetcher(
-            "https://unihub.trgwii.com/admin/create/domain",
+            "http://localhost:3001/admin/create/domain",
             "POST",
             {
               "Content-Type": "application/json",
@@ -192,12 +193,14 @@ export function DomainModal() {
             },
             credentials.get()
           );
-
           let res = await domain.text();
-          if (typeof res === "string") {
+          if (!res.includes(":")) {
             res = {
               message: `you are offline`,
             };
+          }
+          if (typeof res === "string") {
+            res = JSON.parse(res);
           }
 
           if (!domain.ok) {
@@ -223,7 +226,7 @@ export function DomainModal() {
         onclick: async () => {
           _.dispatch("workspace", { tree: Loader() });
           const domain = await _.fetcher(
-            "https://unihub.trgwii.com/admin/delete/domain",
+            "http://localhost:3001/admin/delete/domain",
             "POST",
             {
               "Content-Type": "application/json",
@@ -232,11 +235,15 @@ export function DomainModal() {
             credentials.get()
           );
           let res = await domain.text();
-          if (typeof res === "string") {
+          if (!res.includes(":")) {
             res = {
               message: `you are offline`,
             };
           }
+          if (typeof res === "string") {
+            res = JSON.parse(res);
+          }
+
           if (!domain.ok) {
             _.dispatch("workspace", { tree: ErrorBox(res.message, "Domains") });
           } else {
@@ -311,13 +318,19 @@ export function CourseModal() {
         onclick: async () => {
           _.dispatch("workspace", { tree: Loader() });
           await _.littleAxios(
-            "https://unihub.trgwii.com/admin/create/Course",
+            "http://localhost:3001/admin/create/Course",
             credentials.get(),
             (res) => {
-              const Course = JSON.parse(res.response);
+              let Course = res.response;
+              if (Course.includes(":")) {
+                Course = JSON.parse(Course);
+              }
               if (Course.message !== "ok") {
                 _.dispatch("workspace", {
-                  tree: ErrorBox(Course, "Courses"),
+                  tree: ErrorBox(
+                    Course.message ? Course.message : Course,
+                    "Courses"
+                  ),
                 });
               } else {
                 _.dispatch("workspace", {
@@ -358,13 +371,19 @@ export function CourseModal() {
         onclick: async () => {
           _.dispatch("workspace", { tree: Loader() });
           await _.littleAxios(
-            "https://unihub.trgwii.com/admin/update/Course",
+            "http://localhost:3001/admin/update/Course",
             credentials.get(),
             (res) => {
-              const Course = JSON.parse(res.response);
+              let Course = res.response;
+              if (Course.includes(":")) {
+                Course = JSON.parse(Course);
+              }
               if (Course.message !== "ok") {
                 _.dispatch("workspace", {
-                  tree: ErrorBox(Course, "Courses"),
+                  tree: ErrorBox(
+                    Course.message ? Course.message : Course,
+                    "Courses"
+                  ),
                 });
               } else {
                 _.dispatch("workspace", {
@@ -389,7 +408,7 @@ export function CourseModal() {
         onclick: async () => {
           _.dispatch("workspace", { tree: Loader() });
           const Course = await _.fetcher(
-            "https://unihub.trgwii.com/admin/delete/Course",
+            "http://localhost:3001/admin/delete/Course",
             "POST",
             {
               "Content-Type": "application/json",
@@ -397,11 +416,14 @@ export function CourseModal() {
             },
             credentials.get()
           );
-          let res = await Course.text();
-          if (typeof res === "string") {
+          let res = await domain.text();
+          if (!res.includes(":")) {
             res = {
               message: `you are offline`,
             };
+          }
+          if (typeof res === "string") {
+            res = JSON.parse(res);
           }
 
           if (!Course.ok) {
@@ -486,17 +508,23 @@ export function ResourseModal() {
         onclick: async () => {
           _.dispatch("workspace", { tree: Loader() });
           await _.littleAxios(
-            "https://unihub.trgwii.com/admin/create/resource",
+            "http://localhost:3001/admin/create/resource",
             credentials.get(),
             (res) => {
-              const Resource = JSON.parse(res.response);
-              if (Resource.message !== "ok") {
+              let Course = res.response;
+              if (Course.includes(":")) {
+                Course = JSON.parse(Course);
+              }
+              if (Course.message !== "ok") {
                 _.dispatch("workspace", {
-                  tree: ErrorBox(Resource, "Resources"),
+                  tree: ErrorBox(
+                    Course.message ? Course.message : Course,
+                    "Resources"
+                  ),
                 });
               } else {
                 _.dispatch("workspace", {
-                  tree: SuccessBox(Resource.message, "Resources"),
+                  tree: SuccessBox(Course.message, "Resources"),
                 });
               }
             }
@@ -539,17 +567,23 @@ export function ResourseModal() {
         onclick: async () => {
           _.dispatch("workspace", { tree: Loader() });
           await _.littleAxios(
-            "https://unihub.trgwii.com/admin/up/resource",
+            "http://localhost:3001/admin/up/resource",
             credentials.get(),
             (res) => {
-              const Resource = JSON.parse(res.response);
-              if (Resource.message !== "ok") {
+              let Course = res.response;
+              if (Course.includes(":")) {
+                Course = JSON.parse(Course);
+              }
+              if (Course.message !== "ok") {
                 _.dispatch("workspace", {
-                  tree: ErrorBox(Resource, "Resources"),
+                  tree: ErrorBox(
+                    Course.message ? Course.message : Course,
+                    "Resources"
+                  ),
                 });
               } else {
                 _.dispatch("workspace", {
-                  tree: SuccessBox(Resource.message, "Resources"),
+                  tree: SuccessBox(Course.message, "Resources"),
                 });
               }
             }
@@ -575,8 +609,8 @@ export function ResourseModal() {
         text: "Make Request",
         onclick: async () => {
           _.dispatch("workspace", { tree: Loader() });
-          const Resource = await _.fetcher(
-            "https://unihub.trgwii.com/admin/delete/Resource",
+          const domain = await _.fetcher(
+            "http://localhost:3001/admin/delete/Resource",
             "POST",
             {
               "Content-Type": "application/json",
@@ -584,13 +618,16 @@ export function ResourseModal() {
             },
             credentials.get()
           );
-          let res = await Resource.text();
-          if (typeof res !== "object") {
+          let res = await domain.text();
+          if (!res.includes(":")) {
             res = {
               message: `you are offline`,
             };
           }
-          if (!Resource.ok) {
+          if (typeof res === "string") {
+            res = JSON.parse(res);
+          }
+          if (res.message !== "ok") {
             _.dispatch("workspace", {
               tree: ErrorBox(res.message, "Resources"),
             });
@@ -675,17 +712,23 @@ export function NotificationModal() {
         onclick: async () => {
           _.dispatch("workspace", { tree: Loader() });
           await _.littleAxios(
-            "https://unihub.trgwii.com/admin/create/notification",
+            "http://localhost:3001/admin/create/notification",
             credentials.get(),
             (res) => {
-              const Notification = JSON.parse(res.response);
-              if (Notification !== "ok") {
+              let Course = res.response;
+              if (Course.includes(":")) {
+                Course = JSON.parse(Course);
+              }
+              if (Course.message !== "ok") {
                 _.dispatch("workspace", {
-                  tree: ErrorBox(Notification.message, "Notifications"),
+                  tree: ErrorBox(
+                    Course.message ? Course.message : Course,
+                    "Notifications"
+                  ),
                 });
               } else {
                 _.dispatch("workspace", {
-                  tree: SuccessBox(Notification.message, "Notifications"),
+                  tree: SuccessBox(Course.message, "Notifications"),
                 });
               }
             }
@@ -781,7 +824,7 @@ xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 //                   save.id = index;
 //                   saver(save);
 //                   const notification = await fetcher(
-//                     "https://unihub.trgwii.com/admin/pay",
+//                     "http://localhost:3001/admin/pay",
 //                     "POST",
 //                     {},
 //                     save
@@ -807,7 +850,7 @@ xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 //                 onPress={async () => {
 //                   setLoading(true);
 //                   const notification = await fetcher(
-//                     "https://unihub.trgwii.com/admin/decline",
+//                     "http://localhost:3001/admin/decline",
 //                     "POST",
 //                     {},
 //                     save

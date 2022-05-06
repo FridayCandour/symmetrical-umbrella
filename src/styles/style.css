@@ -157,3 +157,18 @@ body {
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
+
+.spin {
+  animation: antSpinMove 0.7s linear infinite;
+  border-radius: 100%;
+  min-width: 60px;
+}
+
+@keyframes antSpinMove {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
