@@ -5,10 +5,10 @@
  *  supports files upload
  * ----------------------
  * @param {string} url
- * @param {object?} data
- * @param {(object | function) ?} header or callback
- * @param {function?} callback only
- * @returns response
+ * @param {object?} data?
+ * @param {(object | function) ?} header or callback?
+ * @param {function?} callback only?
+ * @return void
  */
 export default async function littleAxios(url, data, header, callback) {
   if (!callback && typeof header === "function") {
@@ -22,16 +22,17 @@ export default async function littleAxios(url, data, header, callback) {
   const method = data && typeof data !== "object" ? "GET" : "POST";
 
   ajax.addEventListener("load", async function (res) {
-    await callback(res.srcElement);
+    await callback(res.target);
   });
   for (const [k, v] of Object.entries(data)) {
     formData.append(k, v);
   }
   ajax.addEventListener("error", (err) => {
+    console.log(err);
     callback({
-      response: JSON.stringify({
+      response: {
         message: `${method} ${url} net::ERR_FAILED`,
-      }),
+      },
     });
   });
   await ajax.open(method, url, true);

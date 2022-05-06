@@ -2,12 +2,20 @@ import _ from "../../cradova/index.js";
 
 const Input = ({ placeholder, credentials, field, type }) => {
   return _("input.input", {
-    async onclick() {
-      if (type !== "file") {
-        return;
-      }
-      const handle = await _.FS.getFileHandle(this);
-      const file = await handle.getFile();
+    // async onclick() {
+    //   if (type !== "file") {
+    //     return;
+    //   }
+    //   const handle = await _.FS.getFileHandle(this);
+    //   const file = await handle.getFile();
+    //   if (file) {
+    //     let newSave = credentials.get();
+    //     newSave[field] = file;
+    //     credentials.set(newSave);
+    //   }
+    // },
+    onchange() {
+      const file = type === "file" ? this.files[0] : 0;
       if (file) {
         let newSave = credentials.get();
         newSave[field] = file;

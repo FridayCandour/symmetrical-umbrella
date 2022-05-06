@@ -4,75 +4,93 @@ const CACHE_VERSION = 1;
 const CACHES = {
   prefetch: "Admin-cube-prefetch-cache-v" + CACHE_VERSION,
 };
-const urlsToPrefetch = ["/", "/index.js"];
+const urlsToPrefetch = ["/", "/index.js", "/fallback.html"];
 
-self.addEventListener("install", function (event) {
-  const now = Date.now();
+const deleteCache = async (key) => {
+  await caches.delete(key);
+};
+const enableNavigationPreload = async () => {
+  if (self.registration.navigationPreload) {
+    // Enable navigation preloads!
+    await self.registration.navigationPreload.enable();
+  }
+  await deleteOldCaches();
+};
 
-  event.waitUntil(
-    caches
-      .open(CACHES.prefetch)
-      .then(async function (cache) {
-        const cachePromises = urlsToPrefetch.map(async function (
-          urlToPrefetch
-        ) {
-          const url = new URL(urlToPrefetch, location.href);
-          url.search += (url.search ? "&" : "?") + "cache-bust=" + now;
-          const request = new Request(url, { mode: "no-cors" });
-          try {
-            const response = await fetch(request);
-            if (response.status >= 400) {
-              throw new Error(
-                "request for " +
-                  urlToPrefetch +
-                  " failed with status " +
-                  response.statusText
-              );
-            }
-            return await cache.put(urlToPrefetch, response);
-          } catch (error) {
-            console.error("Not caching " + urlToPrefetch + " due to " + error);
-          }
-        });
+const deleteOldCaches = async () => {
+  const cacheKeepList = ["v2"];
+  const keyList = await caches.keys();
+  const cachesToDelete = keyList.filter((key) => !cacheKeepList.includes(key));
+  await Promise.all(cachesToDelete.map(deleteCache));
+};
 
-        await Promise.all(cachePromises);
-        console.log("Pre-fetching complete.");
-      })
-      .catch(function (error) {
-        console.error("Pre-fetching failed:", error);
-      })
-  );
+const addResourcesToCache = async (resources) => {
+  const cache = await caches.open(CACHES.prefetch);
+  await cache.addAll(resources);
+};
+
+const putInCache = async (request, response) => {
+  if (request.method === "POST") {
+    return;
+  }
+  const cache = await caches.open(CACHES.prefetch);
+  await cache.put(request, response);
+};
+
+const cacheFirst = async ({ request, preloadResponsePromise, fallbackUrl }) => {
+  // First try to get the resource from the cache
+  const responseFromCache = await caches.match(request);
+  if (responseFromCache) {
+    return responseFromCache;
+  }
+
+  // Next try to use (and cache) the preloaded response, if it's there
+  const preloadResponse = await preloadResponsePromise;
+  if (preloadResponse) {
+    console.info("using preload response", preloadResponse);
+    putInCache(request, preloadResponse.clone());
+    return preloadResponse;
+  }
+
+  // Next try to get the resource from the network
+  try {
+    const responseFromNetwork = await fetch(request);
+    // response may be used only once
+    // we need to save clone to put one copy in cache
+    // and serve second one
+    putInCache(request, responseFromNetwork.clone());
+    return responseFromNetwork;
+  } catch (error) {
+    const fallbackResponse = await caches.match(fallbackUrl);
+    if (fallbackResponse) {
+      return fallbackResponse;
+    }
+    // when even the fallback response is not available,
+    // there is nothing we can do, but we must always
+    // return a Response object
+    return new Response("Network error happened", {
+      status: 408,
+      headers: { "Content-Type": "text/plain" },
+    });
+  }
+};
+
+// Enable navigation preload
+
+self.addEventListener("activate", (event) => {
+  event.waitUntil(enableNavigationPreload());
 });
 
-self.addEventListener("activate", async function (e) {
-  e.waitUntil(
-    caches.keys().then((cach) => {
-      if (cach !== CACHES.prefetch) {
-        return caches.delete(cach);
-      }
-    })
-  );
-  return self.clients.claim();
+self.addEventListener("install", (event) => {
+  event.waitUntil(addResourcesToCache(["/"]));
 });
 
 self.addEventListener("fetch", (event) => {
-  const updateCache = async (request) => {
-    const cache = await caches.open(CACHES.prefetch);
-    const response = await fetch(request);
-    return await cache.put(request, response);
-  };
-
-  event.waitUntil(updateCache(event.request));
-
   event.respondWith(
-    fetch(event.request).catch(async (_error) => {
-      const cache = await caches.open(CACHES.prefetch);
-      const matching = await cache.match(event.request);
-      const report =
-        !matching || matching.status === 404
-          ? Promise.reject("no-match")
-          : matching;
-      return report;
+    cacheFirst({
+      request: event.request,
+      preloadResponsePromise: event.preloadResponse,
+      fallbackUrl: "/fallback.html",
     })
   );
 });

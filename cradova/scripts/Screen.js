@@ -19,11 +19,12 @@ class Screen {
         this.template.append(fuc);
       }
     } else {
-      if (!(this.html instanceof HTMLElement)) {
-        throw new Error("Cradova err only parent with descendants is valid");
-      } else {
+      if (this.html instanceof HTMLElement) {
         this.template.append(this.html);
       }
+    }
+    if (!(this.template.firstChild instanceof HTMLElement)) {
+      throw new Error("Cradova err only parent with descendants is valid ");
     }
     this.treeCreated = true;
   }
@@ -51,15 +52,15 @@ class Screen {
     if (document.title === this.name) {
       return;
     }
-    const screen = document.querySelector("#cradova-screen-set");
-    if (screen) {
-      this.detach();
-    }
     if (!this.treeCreated) {
       await this.package();
     }
     document.title = this.name;
+    this.detach();
     document.querySelector("#app-wrapper").append(this.template);
+    if (document.querySelector("#app-wrapper").childElementCount > 1) {
+      this.detach();
+    }
     this.callBacks.forEach((cb) => cb(this.template.firstChild));
   }
 }

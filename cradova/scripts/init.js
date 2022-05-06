@@ -14,5 +14,4 @@ const Init = function (config) {
   document.body.append(Wrapper);
   return Wrapper;
 };
-
 export default Init;

@@ -1,13 +1,5 @@
-import {
-  con,
-  domains,
-  courses,
-  resources,
-  notifications,
-  paymentRequests,
-} from "../Mock/index.js";
 import _ from "../../cradova/index.js";
-import { menu, Batch, Gam, Input } from "./index.js";
+import { Input } from "./index.js";
 // #e2c9b3
 // #f3f8fc
 // #A0A3BD
@@ -15,10 +7,11 @@ import { menu, Batch, Gam, Input } from "./index.js";
 // #9d9d9d
 // #14dde7 light blue
 // #1032d9 dark blue
-// #36e517 green
+// #36e517 green mode
 // #eff9fb light mode
 // #333333 dark mode
 // #141618 dark mode
+// #06222d dark mode
 export default function FormContainer(view) {
   switch (view) {
     case "Courses":
@@ -199,10 +192,14 @@ export function DomainModal() {
             },
             credentials.get()
           );
+
           let res = await domain.text();
-          if (typeof res !== "object") {
-            res = JSON.parse(await domain.text());
+          if (typeof res === "string") {
+            res = {
+              message: `you are offline`,
+            };
           }
+
           if (!domain.ok) {
             _.dispatch("workspace", { tree: ErrorBox(res.message, "Domains") });
           } else {
@@ -235,8 +232,10 @@ export function DomainModal() {
             credentials.get()
           );
           let res = await domain.text();
-          if (typeof res !== "object") {
-            res = JSON.parse(await domain.text());
+          if (typeof res === "string") {
+            res = {
+              message: `you are offline`,
+            };
           }
           if (!domain.ok) {
             _.dispatch("workspace", { tree: ErrorBox(res.message, "Domains") });
@@ -315,10 +314,10 @@ export function CourseModal() {
             "https://unihub.trgwii.com/admin/create/Course",
             credentials.get(),
             (res) => {
-              const Course = JSON.parse(res.response);
+              const Course = res.response;
               if (Course.message !== "ok") {
                 _.dispatch("workspace", {
-                  tree: ErrorBox(Course.message, "Courses"),
+                  tree: ErrorBox(Course, "Courses"),
                 });
               } else {
                 _.dispatch("workspace", {
@@ -362,10 +361,10 @@ export function CourseModal() {
             "https://unihub.trgwii.com/admin/update/Course",
             credentials.get(),
             (res) => {
-              const Course = JSON.parse(res.response);
+              const Course = res.response;
               if (Course.message !== "ok") {
                 _.dispatch("workspace", {
-                  tree: ErrorBox(Course.message, "Courses"),
+                  tree: ErrorBox(Course, "Courses"),
                 });
               } else {
                 _.dispatch("workspace", {
@@ -399,9 +398,12 @@ export function CourseModal() {
             credentials.get()
           );
           let res = await Course.text();
-          if (typeof res !== "object") {
-            res = JSON.parse(await Course.text());
+          if (typeof res === "string") {
+            res = {
+              message: `you are offline`,
+            };
           }
+
           if (!Course.ok) {
             _.dispatch("workspace", {
               tree: ErrorBox(res.message, "Courses"),
@@ -487,10 +489,10 @@ export function ResourseModal() {
             "https://unihub.trgwii.com/admin/create/resource",
             credentials.get(),
             (res) => {
-              const Resource = JSON.parse(res.response);
+              const Resource = res.response;
               if (Resource.message !== "ok") {
                 _.dispatch("workspace", {
-                  tree: ErrorBox(Resource.message, "Resources"),
+                  tree: ErrorBox(Resource, "Resources"),
                 });
               } else {
                 _.dispatch("workspace", {
@@ -540,10 +542,10 @@ export function ResourseModal() {
             "https://unihub.trgwii.com/admin/up/resource",
             credentials.get(),
             (res) => {
-              const Resource = JSON.parse(res.response);
+              const Resource = res.response;
               if (Resource.message !== "ok") {
                 _.dispatch("workspace", {
-                  tree: ErrorBox(Resource.message, "Resources"),
+                  tree: ErrorBox(Resource, "Resources"),
                 });
               } else {
                 _.dispatch("workspace", {
@@ -584,10 +586,9 @@ export function ResourseModal() {
           );
           let res = await Resource.text();
           if (typeof res !== "object") {
-            res = JSON.parse(await Resource.text());
-          }
-          if (typeof res !== "object") {
-            res = JSON.parse(await Resource.text());
+            res = {
+              message: `you are offline`,
+            };
           }
           if (!Resource.ok) {
             _.dispatch("workspace", {
@@ -677,8 +678,8 @@ export function NotificationModal() {
             "https://unihub.trgwii.com/admin/create/notification",
             credentials.get(),
             (res) => {
-              const Notification = JSON.parse(res.response);
-              if (Notification.message !== "ok") {
+              const Notification = res.response;
+              if (Notification !== "ok") {
                 _.dispatch("workspace", {
                   tree: ErrorBox(Notification.message, "Notifications"),
                 });

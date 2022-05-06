@@ -58,6 +58,10 @@ Router.navigate = async function (href) {
 };
 
 Router.router = function (e) {
+  if (e.target.tagName === "INPUT") {
+    return;
+  }
+  //
   let Alink;
   if (e.target.tagName === "A") {
     Alink = e.target;

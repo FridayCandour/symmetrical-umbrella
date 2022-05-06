@@ -10,14 +10,11 @@
  */
 
 export default async function fetcher(url, method = "GET", headers, data) {
-  try {
-    const asis = await fetch(url, {
-      headers,
-      method,
-      body: JSON.stringify(data),
-    });
-    return asis;
-  } catch (error) {
+  return await fetch(url, {
+    headers,
+    method,
+    body: JSON.stringify(data),
+  }).catch((err) => {
     return {
       async text() {
         return {
@@ -25,5 +22,5 @@ export default async function fetcher(url, method = "GET", headers, data) {
         };
       },
     };
-  }
+  });
 }
