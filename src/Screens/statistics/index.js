@@ -164,7 +164,7 @@ const Home = async () => {
   });
 
   const domain = await _.fetcher(
-    "http://localhost:3001/admin/stat",
+    "https://unihub.trgwii.com//admin/stat",
     "POST",
     {
       "Content-Type": "application/json",
@@ -221,7 +221,7 @@ _.css(".statistics-wrapper", {
   padding: "30px 15px 60px 15px",
   margin: "auto",
   width: "97.8%",
-  //border: "4px red solid",
+  // border: "4px red solid",
 });
 _.css(".statistics-wrapper .data", {
   display: "flex",

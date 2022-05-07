@@ -185,7 +185,7 @@ export function DomainModal() {
         onclick: async () => {
           _.dispatch("workspace", { tree: Loader() });
           const domain = await _.fetcher(
-            "http://localhost:3001/admin/create/domain",
+            "https://unihub.trgwii.com//admin/create/domain",
             "POST",
             {
               "Content-Type": "application/json",
@@ -226,7 +226,7 @@ export function DomainModal() {
         onclick: async () => {
           _.dispatch("workspace", { tree: Loader() });
           const domain = await _.fetcher(
-            "http://localhost:3001/admin/delete/domain",
+            "https://unihub.trgwii.com//admin/delete/domain",
             "POST",
             {
               "Content-Type": "application/json",
@@ -318,7 +318,7 @@ export function CourseModal() {
         onclick: async () => {
           _.dispatch("workspace", { tree: Loader() });
           await _.littleAxios(
-            "http://localhost:3001/admin/create/Course",
+            "https://unihub.trgwii.com//admin/create/Course",
             credentials.get(),
             (res) => {
               let Course = res.response;
@@ -371,7 +371,7 @@ export function CourseModal() {
         onclick: async () => {
           _.dispatch("workspace", { tree: Loader() });
           await _.littleAxios(
-            "http://localhost:3001/admin/update/Course",
+            "https://unihub.trgwii.com//admin/update/Course",
             credentials.get(),
             (res) => {
               let Course = res.response;
@@ -408,7 +408,7 @@ export function CourseModal() {
         onclick: async () => {
           _.dispatch("workspace", { tree: Loader() });
           const Course = await _.fetcher(
-            "http://localhost:3001/admin/delete/Course",
+            "https://unihub.trgwii.com//admin/delete/Course",
             "POST",
             {
               "Content-Type": "application/json",
@@ -508,7 +508,7 @@ export function ResourseModal() {
         onclick: async () => {
           _.dispatch("workspace", { tree: Loader() });
           await _.littleAxios(
-            "http://localhost:3001/admin/create/resource",
+            "https://unihub.trgwii.com//admin/create/resource",
             credentials.get(),
             (res) => {
               let Course = res.response;
@@ -567,7 +567,7 @@ export function ResourseModal() {
         onclick: async () => {
           _.dispatch("workspace", { tree: Loader() });
           await _.littleAxios(
-            "http://localhost:3001/admin/up/resource",
+            "https://unihub.trgwii.com//admin/up/resource",
             credentials.get(),
             (res) => {
               let Course = res.response;
@@ -610,7 +610,7 @@ export function ResourseModal() {
         onclick: async () => {
           _.dispatch("workspace", { tree: Loader() });
           const domain = await _.fetcher(
-            "http://localhost:3001/admin/delete/Resource",
+            "https://unihub.trgwii.com//admin/delete/Resource",
             "POST",
             {
               "Content-Type": "application/json",
@@ -712,7 +712,7 @@ export function NotificationModal() {
         onclick: async () => {
           _.dispatch("workspace", { tree: Loader() });
           await _.littleAxios(
-            "http://localhost:3001/admin/create/notification",
+            "https://unihub.trgwii.com//admin/create/notification",
             credentials.get(),
             (res) => {
               let Course = res.response;
@@ -824,7 +824,7 @@ xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 //                   save.id = index;
 //                   saver(save);
 //                   const notification = await fetcher(
-//                     "http://localhost:3001/admin/pay",
+//                     "https://unihub.trgwii.com//admin/pay",
 //                     "POST",
 //                     {},
 //                     save
@@ -850,7 +850,7 @@ xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 //                 onPress={async () => {
 //                   setLoading(true);
 //                   const notification = await fetcher(
-//                     "http://localhost:3001/admin/decline",
+//                     "https://unihub.trgwii.com//admin/decline",
 //                     "POST",
 //                     {},
 //                     save

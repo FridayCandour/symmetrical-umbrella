@@ -10,6 +10,8 @@ import Profile from "./src/Screens/Profile/index.js";
 import TabBar from "./src/navigators/Tabs.js";
 import DrawerBar from "./src/navigators/Drawer.js";
 import Access from "./src/Screens/login/index.js";
+import Worker from "./service-worker.js?worker";
+// console.log(Worker());
 /**
  * adding navigators
  */
@@ -68,4 +70,4 @@ _.Router.route("/Profile", () => Profile.Activate());
 _.Router.route("/workspace", () => doc.Activate());
 _.Router.route("/access", () => Access.Activate());
 
-// http://localhost:3001/
+// https://unihub.trgwii.com//

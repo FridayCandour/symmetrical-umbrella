@@ -53,7 +53,7 @@ const join = (credentials, err) => {
       onclick: async () => {
         _.dispatch("login", { tree: Loader() });
         await _.littleAxios(
-          "http://localhost:3001/admin/register",
+          "https://unihub.trgwii.com//admin/register",
           credentials.get(),
           (res) => {
             let Course = res.response;

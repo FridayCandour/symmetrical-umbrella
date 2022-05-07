@@ -61,7 +61,7 @@ class Screen {
     if (document.querySelector("#app-wrapper").childElementCount > 1) {
       //   this.detach();
     }
-    console.log(document.querySelector("#app-wrapper").childElementCount);
+    //    console.log(document.querySelector("#app-wrapper").childElementCount);
     this.callBacks.forEach((cb) => cb(this.template.firstChild));
   }
 }
